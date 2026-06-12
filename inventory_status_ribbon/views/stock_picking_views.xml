@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_stock_picking_form_ribbon" model="ir.ui.view">
+                <field name="name">stock.picking.form.ribbon</field>
+                <field name="model">stock.picking</field>
+                <field name="inherit_id" ref="stock.view_picking_form"/>
+                <field name="arch" type="xml">
+            
+                    <!-- Letakkan sebelum sheet -->
+                    <xpath expr="//div[@name='button_box']" position="after">
+            
+                        <widget name="web_ribbon"
+                                title="DONE"
+                                bg_color="ribbon-done"
+                                attrs="{'invisible':[('state','!=','done')]}"/>
+            
+                        <widget name="web_ribbon"
+                                title="READY"
+                                bg_color="ribbon-ready"
+                                attrs="{'invisible':[('state','!=','assigned')]}"/>
+            
+                        <widget name="web_ribbon"
+                                title="WAITING"
+                                bg_color="ribbon-waiting"
+                                attrs="{'invisible':[('state','!=','waiting')]}"/>
+            
+                        <widget name="web_ribbon"
+                                title="DRAFT"
+                                bg_color="ribbon-draft"
+                                attrs="{'invisible':[('state','!=','draft')]}"/>
+            
+                        <widget name="web_ribbon"
+                                title="CANCELLED"
+                                bg_color="ribbon-cancel"
+                                attrs="{'invisible':[('state','!=','cancel')]}"/>
+            
+                    </xpath>
+            
+                </field>
+            </record>
+
+</odoo>

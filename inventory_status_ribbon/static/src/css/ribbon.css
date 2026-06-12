@@ -1,0 +1,19 @@
+.ribbon-draft {
+  background-color: #646e77 !important;
+}
+
+.ribbon-waiting {
+  background-color: #fd7e14 !important;
+}
+
+.ribbon-ready {
+  background-color: #0dcaf0 !important;
+}
+
+.ribbon-done {
+  background-color: #198754 !important;
+}
+
+.ribbon-cancel {
+  background-color: #dc3545 !important;
+}
