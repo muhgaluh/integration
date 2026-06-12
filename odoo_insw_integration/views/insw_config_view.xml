@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_insw_config_form" model="ir.ui.view">
+        <field name="name">insw.config.form</field>
+        <field name="model">insw.config</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h2>Konfigurasi INSW</h2>
+                    <group>
+                        <field name="environment" widget="radio"/>
+                        <field name="is_mockup" widget="boolean_toggle"/>
+                        <field name="url_api"/>
+                        <field name="npwp_perusahaan"/>
+                    </group>
+                    <group string="Kunci Akses">
+                        <field name="api_key" password="True"/>
+                        <field name="unique_key"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_insw_config" model="ir.actions.act_window">
+        <field name="name">Konfigurasi INSW</field>
+        <field name="res_model">insw.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

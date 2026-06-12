@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_adjustment_batch_user,stock.adjustment.batch user,model_stock_adjustment_batch,stock.group_stock_user,1,1,1,0
+access_stock_adjustment_batch_manager,stock.adjustment.batch manager,model_stock_adjustment_batch,stock.group_stock_manager,1,1,1,1
+access_stock_adjustment_batch_line_user,stock.adjustment.batch.line user,model_stock_adjustment_batch_line,stock.group_stock_user,1,1,1,1
+access_stock_adjustment_batch_line_manager,stock.adjustment.batch.line manager,model_stock_adjustment_batch_line,stock.group_stock_manager,1,1,1,1
+access_generate_batches_wizard,generate.batches.wizard user,model_generate_batches_wizard,stock.group_stock_user,1,1,1,1

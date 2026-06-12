@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_insw_root" name="INSW" web_icon="odoo_insw_integration,static/description/icon.png" sequence="2"/>
+
+    <record id="action_insw_overview" model="ir.actions.act_window">
+        <field name="name">Overview INSW</field>
+        <field name="res_model">insw.dashboard</field>
+        <field name="view_mode">kanban</field> 
+    </record>
+
+    <record id="action_insw_queue_list" model="ir.actions.act_window">
+        <field name="name">Semua Transaksi</field>
+        <field name="res_model">insw.queue</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Belum ada data antrian INSW.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_insw_config" model="ir.actions.act_window">
+        <field name="name">Konfigurasi INSW</field>
+        <field name="res_model">insw.config</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_insw_overview" name="Overview" parent="menu_insw_root" action="action_insw_overview" sequence="1"/>
+    
+    <menuitem id="menu_insw_queue" name="Semua Transaksi" parent="menu_insw_root" action="action_insw_queue_list" sequence="10"/>
+    
+    <menuitem id="menu_insw_config" name="Konfigurasi" parent="menu_insw_root" action="action_insw_config" sequence="90"/>
+</odoo>

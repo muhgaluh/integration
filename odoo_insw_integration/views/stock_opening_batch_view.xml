@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_stock_opening_batch_form_insw" model="ir.ui.view">
+        <field name="name">stock.opening.batch.form.insw</field>
+        <!-- Model Di Modul Ini -->
+        <field name="model">stock.opening.batch</field>
+        <field name="inherit_id" ref="inventory_adjustments_beginning.stock_opening_batch_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="oe_button_box" name="button_box">
+            
+                    <button name="action_view_insw_opening_queue"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list"
+                            attrs="{'invisible':[('insw_opening_queue_count','=',0)]}">
+            
+                        <field name="insw_opening_queue_count" widget="statinfo" string="Saldo Awal"/>
+                    </button>
+            
+                    <field name="insw_status" invisible="1"/>
+                    <field name="insw_opening_queue_id" invisible="1"/>
+                    <field name="insw_opening_queue_count" invisible="1"/>
+            
+                </div>
+            </xpath>
+
+            <xpath expr="//sheet/div[@class='oe_title']/h1" position="before">
+                <widget name="web_ribbon" title="INSW SENT" bg_color="bg-success" attrs="{'invisible': [('insw_status', '!=', 'sent')]}"/>
+                <widget name="web_ribbon" title="INSW ERROR" bg_color="bg-danger" attrs="{'invisible': [('insw_status', '!=', 'error')]}"/>
+                <widget name="web_ribbon" title="INSW DRAFT" bg_color="bg-warning" attrs="{'invisible': [('insw_status', '!=', 'draft')]}"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+
+                <button
+                    name="action_create_insw_opening_balance_queue"
+                    string="Lapor Saldo Awal (INSW)"
+                    type="object"
+                    class="oe_highlight"
+                    attrs="{'invisible': ['|', ('state', '!=', 'done'), ('insw_opening_queue_id', '!=', False)]}"
+                    groups="stock.group_stock_manager"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

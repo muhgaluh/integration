@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="stock_adjustment_batch_form_view" model="ir.ui.view">
+        <field name="name">stock.adjustment.batch.form</field>
+        <field name="model">stock.adjustment.batch</field>
+        <field name="arch" type="xml">
+            <form string="Adjustment Batch">
+                <header>                  
+                    <button name="action_clear_lines"
+                        type="object" string="Clear Lines"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        confirm="Are you sure you want to delete all adjustment lines? This action cannot be undone."/>
+                    <button name="action_set_counts_to_zero"
+                        type="object" string="Set Counts to Zero"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"
+                        confirm="Are you sure you want to set all counted quantities to 0?"/>
+
+                    <button name="action_request_approval" type="object" string="Request Approval"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_stock_manager', '=', True)]}"/>
+
+                    <button name="action_validate" type="object" string="Validate"
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('is_stock_manager', '=', False)]}"/>
+
+                    <button name="action_validate" type="object" string="Approve"
+                        groups="stock.group_stock_manager" class="oe_highlight"
+                        attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <field name="is_stock_manager" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/></h1>
+                    </div>
+                    <group>
+                        <group><field name="user_id"/></group>
+                        <group><field name="date"/></group>
+                    </group>
+                    <group>
+                        <field name="location_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="reason" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    </group>
+                    <notebook>
+                        <page string="Adjustments" name="adjustments">
+                            <field name="line_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="location_id" force_save="1"/>
+                                    <field name="lot_id"/>
+                                    <field name="theoretical_qty" force_save="1"/>
+                                    <field name="counted_qty"/>
+                                    <field name="difference"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_adjustment_batch_tree_view" model="ir.ui.view">
+        <field name="name">stock.adjustment.batch.tree</field>
+        <field name="model">stock.adjustment.batch</field>
+        <field name="arch" type="xml">
+            <tree string="Adjustment Batches">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="location_id"/> <field name="reason"/>
+                <field name="user_id"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-info="state in ('draft', 'in_progress')"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_stock_adjustment_batch" model="ir.actions.act_window">
+        <field name="name">Adjustment Batches</field>
+        <field name="res_model">stock.adjustment.batch</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="menu_stock_adjustment_batch"
+        name="Adjustment Batches"
+        action="action_stock_adjustment_batch"
+        parent="stock.menu_stock_warehouse_mgmt"
+        sequence="15"/>
+        
+    <menuitem
+        id="menu_generate_batches_wizard"
+        name="Generate Count Batches"
+        action="action_open_generate_batches_wizard"
+        parent="stock.menu_stock_warehouse_mgmt"
+        sequence="14"/>
+
+</odoo>

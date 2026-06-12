@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_category_property_form_insw" model="ir.ui.view">
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <group name="first" position="after">
+                <group string="Integrasi INSW">
+                    <field name="insw_commodity_code"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <record id="view_uom_form_insw" model="ir.ui.view">
+        <field name="model">uom.uom</field>
+        <field name="inherit_id" ref="uom.product_uom_form_view"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="insw_uom_code" placeholder="Contoh: KGM, PCE"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_insw_config,insw.config,model_insw_config,group_insw_manager,1,1,1,1
+access_insw_queue,insw.queue,model_insw_queue,group_insw_user,1,1,1,1
+access_insw_queue_line,insw.queue.line,model_insw_queue_line,group_insw_user,1,1,1,1
+access_insw_dashboard,insw.dashboard,model_insw_dashboard,group_insw_user,1,1,1,1

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_adjustment_batch_form_insw" model="ir.ui.view">
+        <field name="name">stock.adjustment.batch.form.insw</field>
+        <field name="model">stock.adjustment.batch</field>
+        <field name="inherit_id" ref="inventory_adjustments_extension.stock_adjustment_batch_form_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <!-- <button name="action_view_insw_queue" type="object" class="oe_stat_button" icon="fa-globe" 
+                            attrs="{'invisible': [('insw_queue_count', '=', 0)]}">
+                        <field name="insw_queue_count" widget="statinfo" string="INSW"/>
+                    </button> -->
+
+                    <button name="action_view_insw_stock_opname_queue"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-list"
+                            attrs="{'invisible':[('insw_queue_stock_opname_count','=',0)]}">
+
+                        <field name="insw_queue_stock_opname_count" widget="statinfo" string="Stock Opname"/>
+                    </button>
+
+                    <button name="action_view_insw_adjustment_queue"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-exchange"
+                            attrs="{'invisible':[('insw_queue_adjustment_count','=',0)]}">
+
+                        <field name="insw_queue_adjustment_count"
+                            widget="statinfo"
+                            string="Adjustment"/>
+                    </button>
+
+                    <field name="insw_queue_id" invisible="1"/>
+                    <field name="insw_report_type" invisible="1"/>
+                    <field name="insw_status" invisible="1"/>
+                    <field name="insw_queue_stock_opname_count" invisible="1"/>
+                    <field name="insw_queue_adjustment_count" invisible="1"/>
+                </div>
+            </xpath>
+
+            <xpath expr="//div[@class='oe_title']" position="before">
+                <widget name="web_ribbon" title="INSW SENT" bg_color="bg-success" attrs="{'invisible': [('insw_status', '!=', 'sent')]}"/>
+                <widget name="web_ribbon" title="INSW ERROR" bg_color="bg-danger" attrs="{'invisible': [('insw_status', '!=', 'error')]}"/>
+                <widget name="web_ribbon" title="INSW DRAFT" bg_color="bg-warning" attrs="{'invisible': [('insw_status', '!=', 'draft')]}"/>
+            </xpath>
+            
+            <xpath expr="//header" position="inside">
+                <button name="action_create_insw_stock_opname_queue" string="Lapor Stock Opname (INSW)" type="object" 
+                    class="oe_highlight"
+                    attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('insw_report_type','!=','stock_opname'), ('insw_status', '!=', False)]}" 
+                    groups="stock.group_stock_manager"/>
+                <button name="action_create_insw_adjustment_queue" string="Lapor Adjustment (INSW)" type="object" 
+                        class="oe_highlight"
+                        attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('insw_report_type','!=','adjustment'), ('insw_status', '!=', False)]}" 
+                        groups="stock.group_stock_manager"/>
+            </xpath>
+
+            <xpath expr="//field[@name='location_id']" position="after">
+                <field name="insw_report_type" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_adjustment_batch_tree_insw" model="ir.ui.view">
+        <field name="name">stock.adjustment.batch.tree.insw</field>
+        <field name="model">stock.adjustment.batch</field>
+        <field name="inherit_id" ref="inventory_adjustments_extension.stock_adjustment_batch_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="insw_status" widget="badge" 
+                       decoration-success="insw_status == 'sent'" 
+                       decoration-danger="insw_status == 'error'" 
+                       decoration-warning="insw_status == 'draft'"
+                       optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

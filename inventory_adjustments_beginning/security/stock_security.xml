@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="module_category_opening_batch" model="ir.module.category">
+            <field name="name">Opening Balance / Migrasi Stok</field>
+            <field name="description">Akses untuk modul migrasi saldo awal stok.</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <record id="group_opening_batch_user" model="res.groups">
+            <field name="name">User (Input Only)</field>
+            <field name="category_id" ref="module_category_opening_batch"/>
+            <field name="implied_ids" eval="[(4, ref('stock.group_stock_user'))]"/>
+        </record>
+
+        <record id="group_opening_batch_manager" model="res.groups">
+            <field name="name">Manager (Validator)</field>
+            <field name="category_id" ref="module_category_opening_batch"/>
+            <field name="implied_ids" eval="[(4, ref('group_opening_batch_user')), (4, ref('stock.group_stock_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+    </data>
+</odoo>

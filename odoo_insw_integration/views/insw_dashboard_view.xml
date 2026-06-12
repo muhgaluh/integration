@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_insw_dashboard_kanban" model="ir.ui.view">
+        <field name="name">insw.dashboard.kanban</field>
+        <field name="model">insw.dashboard</field>
+        <field name="arch" type="xml">
+            <kanban class="oe_background_grey o_kanban_dashboard" create="false">
+                <field name="name"/>
+                <field name="kd_kegiatan"/>
+                <field name="count_draft"/>
+                <field name="count_ready"/>
+                <field name="count_sent"/>
+                <field name="count_error"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click" style="width: 450px; border-top: 5px solid #ffaa00; background-color: white;">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary" style="font-size: 1.2em; font-weight: bold; color: #4c6080;">
+                                        <field name="name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container o_kanban_card_content mt-3">
+                                <div class="row text-center">
+                                    <div class="col-6 mb-2">
+                                        <button name="action_open_draft" type="object" class="btn btn-secondary w-100" style="background-color: #6c869e; border: none; color: white;">
+                                            <field name="count_draft"/> DRAFT
+                                        </button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button name="action_open_ready" type="object" class="btn btn-info w-100" style="background-color: #17a2b8; border: none; color: white;">
+                                            <field name="count_ready"/> SIAP KIRIM
+                                        </button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button name="action_open_sent" type="object" class="btn btn-success w-100" style="background-color: #28a745; border: none; color: white;">
+                                            <field name="count_sent"/> SELESAI
+                                        </button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button name="action_open_error" type="object" class="btn btn-danger w-100" style="background-color: #dc3545; border: none; color: white;">
+                                            <field name="count_error"/> ERROR
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,49 @@
+<odoo>
+    <record id="mrp_production_form_view_insw" model="ir.ui.view">
+        <field name="name">mrp.production.form.insw</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_insw_queue" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-globe" 
+                        attrs="{'invisible': [('insw_queue_count', '=', 0)]}">
+                    <field name="insw_queue_count" widget="statinfo" string="INSW"/>
+                </button>
+                
+                <field name="insw_status" invisible="1"/>
+                <field name="insw_queue_id" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//sheet/div[@name='button_box']" position="after">
+                <widget name="web_ribbon" title="INSW SENT" bg_color="bg-success" attrs="{'invisible': [('insw_status', '!=', 'sent')]}"/>
+                <widget name="web_ribbon" title="INSW ERROR" bg_color="bg-danger" attrs="{'invisible': [('insw_status', '!=', 'error')]}"/>
+                <widget name="web_ribbon" title="INSW DRAFT" bg_color="bg-warning" attrs="{'invisible': [('insw_status', '!=', 'draft')]}"/>
+            </xpath>
+            
+            <xpath expr="//header" position="inside">
+                <button name="action_create_insw_queue" string="Lapor Produksi (INSW)" type="object" 
+                        attrs="{'invisible': ['|', ('state', '!=', 'done'), ('insw_status', '!=', False)]}" 
+                        groups="mrp.group_mrp_manager"/>
+            </xpath>
+
+        </field>
+    </record>
+    <record id="mrp_production_tree_view_insw" model="ir.ui.view">
+        <field name="name">mrp.production.tree.insw</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="insw_status" widget="badge" 
+                       decoration-success="insw_status == 'sent'" 
+                       decoration-danger="insw_status == 'error'" 
+                       decoration-warning="insw_status == 'draft'"
+                       optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>  

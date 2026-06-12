@@ -1,0 +1,142 @@
+<odoo>
+    <record id="view_insw_queue_form" model="ir.ui.view">
+        <field name="name">insw.queue.form</field>
+        <field name="model">insw.queue</field>
+        <field name="arch" type="xml">
+            <form string="Antrian INSW">
+                <header>
+                    <button name="action_validate" string="Validasi Data" type="object" class="oe_highlight" 
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <button name="action_send_insw" string="KIRIM KE INSW" type="object" class="btn-danger" 
+                            attrs="{'invisible': [('state', '!=', 'ready')]}" confirm="Anda yakin data sudah benar?"/>
+                    <button name="action_set_draft" string="Revisi (Set Draft)" type="object" 
+                            attrs="{'invisible': [('state', 'not in', ['ready', 'error'])]}"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_opening_balance" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-sliders" 
+                                string="Opening Balance"
+                                attrs="{'invisible': [('opening_balance_id', '=', False)]}">
+                        </button>
+                        <button name="action_view_picking" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-truck" 
+                                string="Picking"
+                                attrs="{'invisible': [('picking_id', '=', False)]}">
+                        </button>
+                        <button name="action_view_stock_opname" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-sliders" 
+                                string="Stock Opname"
+                                attrs="{'invisible': [('opname_id', '=', False)]}">
+                        </button>
+                        <button name="action_view_adjustment" 
+                                type="object" class="oe_stat_button" icon="fa-sliders" string="Adjustment"
+                                attrs="{'invisible': [('adjustment_id', '=', False)]}">
+                        </button>
+                        <button name="action_view_production" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-cogs" 
+                                string="Produksi"
+                                attrs="{'invisible': [('production_id', '=', False)]}">
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Informasi Transaksi">
+                            <field name="sumber_dokumen" widget="radio" options="{'horizontal': true}"/>
+                            
+                            <field name="opening_balance_id" 
+                                attrs="{'invisible': [('sumber_dokumen', '!=', 'opening')], 'required': [('sumber_dokumen', '=', 'opening')]}"/>
+                            
+                            <field name="picking_id" 
+                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'picking')], 'required': [('sumber_dokumen', '=', 'picking')]}"/>
+                            
+                            <field name="production_id" 
+                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'production')], 'required': [('sumber_dokumen', '=', 'production')]}"/>
+                            
+                            <field name="opname_id" 
+                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'opname')], 'required': [('sumber_dokumen', '=', 'opname')]}"/>
+                            
+                            <field name="adjustment_id" 
+                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'adjustment')], 'required': [('sumber_dokumen', '=', 'adjustment')]}"/>
+
+                            <field name="keterangan" attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': [('sumber_dokumen', '!=', 'adjustment'), ('kd_kegiatan', '!=', '33')]}"/>
+
+                            <field name="kd_kegiatan" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="nomor_dok_kegiatan" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="tanggal_kegiatan" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            
+                            <field name="lawan_transaksi" 
+                                   attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': ['|', ('sumber_dokumen', 'in', ['opening', 'production']), ('kd_kegiatan', 'in', ['29', '40'])]}"/>
+                            
+                            <field name="total_biaya_produksi" widget="monetary" 
+                                   attrs="{'invisible': [('sumber_dokumen', '!=', 'production'), ('kd_kegiatan', '!=', '40')]}" 
+                                   style="font-weight: bold; font-size: 1.2em;"/>
+                        </group>
+                        <group string="Dokumen Pabean (Manual Input)" style="background-color: #f0f0f0; padding: 10px;" attrs="{'invisible': ['|', ('sumber_dokumen', 'in', ['opening', 'production']), ('kd_kegiatan', 'in', ['29', '40'])]}">
+                            <field name="kode_dokumen_bc" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="nomor_aju" placeholder="Contoh: 000123/..." attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="nomor_dokumen_bc" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="tanggal_dokumen_bc" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Detail Barang">
+                            <field name="line_ids" attrs="{'readonly': [('state', '!=', 'draft')]}">
+                                <tree editable="bottom">
+                                    <field name="kd_barang"/>
+                                    <field name="uraian_barang"/>
+                                    <field name="kd_kategori_barang"/>
+                                    <field name="jumlah"/>
+                                    <field name="kd_satuan"/>
+                                    <field name="nilai_barang" sum="Total Nilai"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Log API (Teknis)">
+                            <group>
+                                <field name="insw_id_transaksi"/>
+                                <field name="error_message" decoration-danger="1"/>
+                            </group>
+                            <group>
+                                <field name="json_payload"/>
+                                <field name="json_response"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_insw_queue_tree" model="ir.ui.view">
+        <field name="name">insw.queue.tree</field>
+        <field name="model">insw.queue</field>
+        <field name="arch" type="xml">
+            <tree decoration-danger="state=='error'" decoration-success="state=='sent'" decoration-info="state=='draft'">
+                <field name="name"/>
+                <field name="tanggal_kegiatan"/>
+                <field name="sumber_dokumen"/>
+                <field name="nomor_dok_kegiatan"/>
+                <field name="kd_kegiatan"/>
+                <field name="total_biaya_produksi" optional="show"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

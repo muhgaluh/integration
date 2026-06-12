@@ -1,0 +1,17 @@
+<odoo>
+    <record id="module_category_insw" model="ir.module.category">
+        <field name="name">INSW KEK</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="group_insw_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_insw"/>
+    </record>
+
+    <record id="group_insw_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_insw"/>
+        <field name="implied_ids" eval="[(4, ref('group_insw_user'))]"/>
+    </record>
+</odoo>

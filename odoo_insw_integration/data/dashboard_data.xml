@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="insw_dash_29" model="insw.dashboard">
+            <field name="name">Saldo Awal</field>
+            <field name="kd_kegiatan">29</field>
+            <field name="color">1</field>
+        </record>
+        <record id="insw_dash_30" model="insw.dashboard">
+            <field name="name">Pemasukan Barang</field>
+            <field name="kd_kegiatan">30</field>
+            <field name="color">1</field>
+        </record>
+        <record id="insw_dash_31" model="insw.dashboard">
+            <field name="name">Pengeluaran Barang</field>
+            <field name="kd_kegiatan">31</field>
+            <field name="color">1</field>
+        </record>
+        <record id="insw_dash_32" model="insw.dashboard">
+            <field name="name">Stock Opname</field>
+            <field name="kd_kegiatan">32</field>
+            <field name="color">1</field>
+        </record>
+        <record id="insw_dash_33" model="insw.dashboard">
+            <field name="name">Adjustment Stok</field>
+            <field name="kd_kegiatan">33</field>
+            <field name="color">1</field>
+        </record>
+        <record id="insw_dash_40" model="insw.dashboard">
+            <field name="name">Produksi / WIP</field>
+            <field name="kd_kegiatan">40</field>
+            <field name="color">1</field>
+        </record>
+    </data>
+</odoo>
