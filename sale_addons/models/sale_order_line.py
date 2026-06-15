@@ -61,7 +61,11 @@ class SaleOrderLine(models.Model):
             # ==========================
             if line.order_id.state in ('draft', 'sent'):
 
-                available_qty = line.product_id.qty_available
+                # available_qty = line.product_id.qty_available
+
+                available_qty = line.product_id.with_context(
+                    warehouse=line.order_id.warehouse_id.id
+                ).free_qty
 
                 if available_qty <= 0:
                     line.stock_status = 'unavailable'
