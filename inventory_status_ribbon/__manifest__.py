@@ -14,7 +14,7 @@
     # Css dan asset lain
     'assets': {
         'web.assets_backend': [
-            'ribbon_add_inv/static/src/css/ribbon.css',
+            'inventory_status_ribbon/static/src/css/ribbon.css',
         ],
     },
     'installable': True,
