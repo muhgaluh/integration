@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="purchase_order_form_ribbon" model="ir.ui.view">
+        <field name="name">purchase.order.form.ribbon</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+                <xpath expr="//div[@name='button_box']" position="after">
+
+                        <field name="purchase_status" invisible="1"/>
+                    
+                        <widget name="web_ribbon"
+                                title="RFQ"
+                                bg_color="bg-dark"
+                                attrs="{'invisible':[('purchase_status','!=','rfq')]}"/>
+                    
+                        <widget name="web_ribbon"
+                                title="RFQ SENT"
+                                bg_color="bg-info"
+                                attrs="{'invisible':[('purchase_status','!=','rfq_sent')]}"/>
+                    
+                        <widget name="web_ribbon"
+                                title="TO APPROVE"
+                                bg_color="bg-warning"
+                                attrs="{'invisible':[('purchase_status','!=','to_approve')]}"/>
+                    
+                        <widget name="web_ribbon"
+                                title="PURCHASE ORDER"
+                                bg_color="bg-primary"
+                                attrs="{'invisible':[('purchase_status','!=','purchase')]}"/>
+                        
+                        <widget name="web_ribbon"
+                                title="PARTIAL RECEIVED"
+                                bg_color="bg-warning"
+                                attrs="{'invisible':[('purchase_status','!=','partial_received')]}"/>
+                        
+                        <widget name="web_ribbon"
+                                title="RECEIVED"
+                                bg_color="bg-success"
+                                attrs="{'invisible':[('purchase_status','!=','received')]}"/>
+                        
+                        <widget name="web_ribbon"
+                                title="DONE"
+                                bg_color="bg-info"
+                                attrs="{'invisible':[('purchase_status','!=','done')]}"/>
+                    
+                        <widget name="web_ribbon"
+                                title="CANCELLED"
+                                bg_color="bg-danger"
+                                attrs="{'invisible':[('purchase_status','!=','cancelled')]}"/>
+                    
+                </xpath>
+        </field>
+    </record>
+</odoo>
