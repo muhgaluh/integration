@@ -14,6 +14,31 @@
                 <field name="availability_status" invisible="1"/>
 
                 <widget name="web_ribbon"
+                        title="TO BE APPROVED"
+                        bg_color="bg-warning"
+                        attrs="{'invisible':[('availability_status','!=','to_approve')]}"/>
+        
+                <widget name="web_ribbon"
+                        title="QUOTATION"
+                        bg_color="bg-info"
+                        attrs="{'invisible':[('availability_status','!=','quotation')]}"/>
+        
+                <widget name="web_ribbon"
+                        title="QUOTATION SENT"
+                        bg_color="bg-info"
+                        attrs="{'invisible':[('availability_status','!=','quotation_sent')]}"/>
+        
+                <widget name="web_ribbon"
+                        title="SALES ORDER"
+                        bg_color="bg-primary"
+                        attrs="{'invisible':[('availability_status','!=','sales_order')]}"/>
+        
+                <widget name="web_ribbon"
+                        title="DONE"
+                        bg_color="bg-success"
+                        attrs="{'invisible':[('availability_status','!=','done')]}"/>
+
+                <!-- <widget name="web_ribbon"
                         title="AVAILABLE"
                         bg_color="bg-success"
                         attrs="{'invisible':[('availability_status','!=','available')]}"/>
@@ -41,7 +66,7 @@
                 <widget name="web_ribbon"
                         title="OUT OF STOCK"
                         bg_color="bg-danger"
-                        attrs="{'invisible':[('availability_status','!=','unavailable')]}"/>
+                        attrs="{'invisible':[('availability_status','!=','unavailable')]}"/> -->
 
             </xpath>
             

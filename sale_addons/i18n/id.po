@@ -1,0 +1,108 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_addons
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20250909\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-18 02:22+0000\n"
+"PO-Revision-Date: 2026-06-18 02:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__available
+msgid "Available"
+msgstr "Tersedia"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "DONE"
+msgstr "Selesai"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__done
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__done
+msgid "Done"
+msgstr "Selesai"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__unavailable
+msgid "Out of Stock"
+msgstr "Stok Habis"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__partial_available
+msgid "Partial Available"
+msgstr "Sebagian Tersedia"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__partial_reserved
+msgid "Partial Reserved"
+msgstr "Sebagian Sudah Dipesan"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "QUOTATION"
+msgstr "Penawaran"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "QUOTATION SENT"
+msgstr "Penawaran Terkirim"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__quotation
+msgid "Quotation"
+msgstr "Penawaran"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__quotation_sent
+msgid "Quotation Sent"
+msgstr "Penawaran Terkirim"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__reserved
+msgid "Reserved"
+msgstr "Sudah Dipesan"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "SALES ORDER"
+msgstr "PESANAN PENJUALAN"
+
+#. module: sale_addons
+#: model:ir.model,name:sale_addons.model_sale_order
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__sales_order
+msgid "Sales Order"
+msgstr "Pesanan Penjualan"
+
+#. module: sale_addons
+#: model:ir.model,name:sale_addons.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Baris Pesanan Penjualan"
+
+#. module: sale_addons
+#: model:ir.model.fields,field_description:sale_addons.field_sale_order__availability_status
+msgid "Status"
+msgstr "Status"
+
+#. module: sale_addons
+#: model:ir.model.fields,field_description:sale_addons.field_sale_order_line__stock_status
+msgid "Stock Status"
+msgstr "Status Stok"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "TO BE APPROVED"
+msgstr "Akan Disetujui"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__to_approve
+msgid "To Be Approved"
+msgstr "Akan Disetujui"
