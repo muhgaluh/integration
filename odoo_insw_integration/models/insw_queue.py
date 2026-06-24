@@ -15,11 +15,11 @@ class InswQueue(models.Model):
     
     # --- Sumber Dokumen (Updated) ---
     sumber_dokumen = fields.Selection([
-        ('opening', 'Saldo Awal (Opening Balance)'),
+        ('opening', 'Opening Balance'),
         ('picking', 'Logistik (Picking)'),
         ('opname', 'Stock Opname'),
         ('adjustment', 'Adjustment'),
-        ('production', 'Produksi (WIP)'),
+        # ('production', 'Produksi (WIP)'),
     ], string='Sumber Data', readonly=True)
 
     opening_balance_id = fields.Many2one('stock.opening.batch', string='Dokumen Saldo Awal', readonly=True)
@@ -42,13 +42,14 @@ class InswQueue(models.Model):
         ('31', '31 - Pengeluaran'),
         ('32', '32 - Stock Opname'),
         ('33', '33 - Adjustment'),
-        ('40', '40 - Produksi / WIP')  # Kode Custom untuk Internal Mapping
+        # ('40', '40 - Produksi / WIP')  # Kode Custom untuk Internal Mapping
     ], string='Jenis Kegiatan', required=True)
 
     nomor_dok_kegiatan = fields.Char(string='No. Dokumen Kegiatan', required=True, help="Nomor Bukti Penerimaan/Pengeluaran Barang")
     # tanggal_kegiatan = fields.Date(string='Tgl. Kegiatan', required=True, default=fields.Date.context_today)
     
     tanggal_kegiatan = fields.Datetime(string='Tgl. Kegiatan', required=True, default=fields.Datetime.now)
+    tanggal_declare = fields.Datetime(string='Tanggal Declare INSW', readonly=True, copy=False, tracking=True)
     
     lawan_transaksi = fields.Char(string='Lawan Transaksi (Entitas)', help="Supplier atau Customer")
     
@@ -129,6 +130,13 @@ class InswQueue(models.Model):
             'x-unique-key': config.unique_key or ''
         }
 
+        # Waktu deklarasi ke INSW
+        # declare_dt = fields.Datetime.now()
+
+        # Simpan ke database agar menjadi audit trail
+        # if not self.tanggal_declare:
+        #     self.tanggal_declare = declare_dt
+
         # Susun Payload 
         nama_entitas = self.lawan_transaksi
         if self.sumber_dokumen in ['production', 'adjustment'] and not nama_entitas:
@@ -142,6 +150,11 @@ class InswQueue(models.Model):
                 self.with_context(tz='Asia/Jakarta'),
                 self.tanggal_kegiatan
             )
+
+        # local_declare_dt = fields.Datetime.context_timestamp(
+        #     self.with_context(tz='Asia/Jakarta'),
+        #     declare_dt
+        # )
 
         # payload_data = {
         #     "kdKegiatan": self.kd_kegiatan,
@@ -179,6 +192,7 @@ class InswQueue(models.Model):
         
         # PILIH PAYLOAD BERDASARKAN KEGIATAN
         if self.kd_kegiatan == '29':
+            # payload_data = self.payload_saldo_awal(local_dt, local_declare_dt)
             payload_data = self.payload_saldo_awal(local_dt)
 
         elif self.kd_kegiatan == '30':
@@ -196,10 +210,10 @@ class InswQueue(models.Model):
         # elif self.kd_kegiatan == '40':
         #     payload_data = self.payload_produksi(local_dt, nama_entitas)
 
-        elif self.kd_kegiatan == '40':
-            raise UserError(
-                "Kegiatan Produksi (40) tidak dikirim ke API INSW."
-            )
+        # elif self.kd_kegiatan == '40':
+        #     raise UserError(
+        #         "Kegiatan Produksi (40) tidak dikirim ke API INSW."
+        #     )
 
         else:
             raise UserError(
@@ -247,8 +261,8 @@ class InswQueue(models.Model):
                 self.opname_id.insw_status = 'sent'
             if self.adjustment_id:
                 self.adjustment_id.insw_status = 'sent'
-            if self.production_id:
-                self.production_id.insw_status = 'sent'   
+            # if self.production_id:
+            #     self.production_id.insw_status = 'sent'   
 
             # STOP DI SINI (Jangan kirim request asli)
             return 
@@ -278,8 +292,8 @@ class InswQueue(models.Model):
                     self.opening_balance_id.insw_status = 'sent'
                 if self.picking_id:
                     self.picking_id.insw_status = 'sent'
-                if self.production_id:
-                    self.production_id.insw_status = 'sent'
+                # if self.production_id:
+                #     self.production_id.insw_status = 'sent'
                 if self.opname_id:
                     self.opname_id.insw_status = 'sent'
                 if self.adjustment_id:
@@ -295,8 +309,8 @@ class InswQueue(models.Model):
                     self.opname_id.insw_status = 'error'
                 if self.adjustment_id:
                     self.adjustment_id.insw_status = 'error'
-                if self.production_id:
-                    self.production_id.insw_status = 'error'
+                # if self.production_id:
+                #     self.production_id.insw_status = 'error'
         except Exception as e:
             self.state = 'error'
             self.error_message = f"Connection Error: {str(e)}"
@@ -318,6 +332,7 @@ class InswQueue(models.Model):
                 "satuan": line.kd_satuan,
                 "nilai": line.nilai_barang,
                 "tanggal_declare": local_dt.strftime('%d-%m-%Y %H:%M:%S') if local_dt else "",
+                # "tanggal_declare": (local_declare_dt.strftime('%d-%m-%Y %H:%M:%S') if local_declare_dt else ""),
             }
 
             payload["barangSaldo"].append(item)

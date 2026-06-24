@@ -40,13 +40,13 @@
                                 type="object" class="oe_stat_button" icon="fa-sliders" string="Adjustment"
                                 attrs="{'invisible': [('adjustment_id', '=', False)]}">
                         </button>
-                        <button name="action_view_production" 
+                        <!-- <button name="action_view_production" 
                                 type="object" 
                                 class="oe_stat_button" 
                                 icon="fa-cogs" 
                                 string="Produksi"
                                 attrs="{'invisible': [('production_id', '=', False)]}">
-                        </button>
+                        </button> -->
                     </div>
                     <div class="oe_title">
                         <h1><field name="name"/></h1>
@@ -61,8 +61,8 @@
                             <field name="picking_id" 
                                     attrs="{'invisible': [('sumber_dokumen', '!=', 'picking')], 'required': [('sumber_dokumen', '=', 'picking')]}"/>
                             
-                            <field name="production_id" 
-                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'production')], 'required': [('sumber_dokumen', '=', 'production')]}"/>
+                            <!-- <field name="production_id" 
+                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'production')], 'required': [('sumber_dokumen', '=', 'production')]}"/> -->
                             
                             <field name="opname_id" 
                                     attrs="{'invisible': [('sumber_dokumen', '!=', 'opname')], 'required': [('sumber_dokumen', '=', 'opname')]}"/>
@@ -78,7 +78,9 @@
                             
                             <field name="lawan_transaksi" 
                                    attrs="{'readonly': [('state', '!=', 'draft')], 'invisible': ['|', ('sumber_dokumen', 'in', ['opening', 'production']), ('kd_kegiatan', 'in', ['29', '40'])]}"/>
-                            
+
+                            <!-- <field name="tanggal_declare" attrs="{'invisible': [('sumber_dokumen', '!=', 'opening'), ('kd_kegiatan', '!=', '29')]}" readonly="1"/> -->
+
                             <field name="total_biaya_produksi" widget="monetary" 
                                    attrs="{'invisible': [('sumber_dokumen', '!=', 'production'), ('kd_kegiatan', '!=', '40')]}" 
                                    style="font-weight: bold; font-size: 1.2em;"/>

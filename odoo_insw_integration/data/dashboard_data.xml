@@ -25,10 +25,10 @@
             <field name="kd_kegiatan">33</field>
             <field name="color">1</field>
         </record>
-        <record id="insw_dash_40" model="insw.dashboard">
+        <!-- <record id="insw_dash_40" model="insw.dashboard">
             <field name="name">Produksi / WIP</field>
             <field name="kd_kegiatan">40</field>
             <field name="color">1</field>
-        </record>
+        </record> -->
     </data>
 </odoo>

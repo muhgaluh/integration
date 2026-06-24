@@ -14,7 +14,7 @@
         'views/insw_queue_view.xml',
         'views/stock_opening_batch_view.xml',
         'views/stock_picking_view.xml',
-        'views/mrp_production_view.xml',
+        # 'views/mrp_production_view.xml',
         'views/stock_adjustment_batch_view.xml',
         'views/insw_dashboard_view.xml',
         'views/insw_menus.xml',
