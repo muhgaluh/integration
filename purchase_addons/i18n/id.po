@@ -43,7 +43,7 @@ msgstr "SEBAGIAN SUDAH DIPESAN"
 #. module: purchase_addons
 #: model_terms:ir.ui.view,arch_db:purchase_addons.purchase_order_form_ribbon
 msgid "PURCHASE ORDER"
-msgstr "PESANAN PEMBELIAN"
+msgstr "ORDER PEMBELIAN"
 
 #. module: purchase_addons
 #: model:ir.model.fields.selection,name:purchase_addons.selection__purchase_order__purchase_status__partial_received
@@ -54,7 +54,7 @@ msgstr "Sebagian Sudah Dipesan"
 #: model:ir.model,name:purchase_addons.model_purchase_order
 #: model:ir.model.fields.selection,name:purchase_addons.selection__purchase_order__purchase_status__purchase
 msgid "Purchase Order"
-msgstr "Pesanan Pembelian"
+msgstr "Order Pembelian"
 
 #. module: purchase_addons
 #: model:ir.model.fields,field_description:purchase_addons.field_purchase_order__purchase_status

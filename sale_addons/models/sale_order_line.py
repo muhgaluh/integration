@@ -10,6 +10,7 @@ class SaleOrderLine(models.Model):
         ('partial_reserved', 'Partial Reserved'),
         ('reserved', 'Reserved'),
         ('done', 'Done'),
+        ('cancelled', 'Cancelled'),
         ('unavailable', 'Out of Stock'),
     ], string='Stock Status',
        compute='_compute_stock_status')
@@ -52,6 +53,11 @@ class SaleOrderLine(models.Model):
 
             if not line.product_id:
                 line.stock_status = False
+                continue
+
+            # Cancelled SO
+            if line.order_id.state == 'cancel':
+                line.stock_status = 'cancelled'
                 continue
 
             qty = line.product_uom_qty

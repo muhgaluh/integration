@@ -18,22 +18,22 @@ msgstr ""
 #. module: purchase_addons
 #: model_terms:ir.ui.view,arch_db:purchase_addons.purchase_order_form_ribbon
 msgid "CANCELLED"
-msgstr "取消"
+msgstr "已取消"
 
 #. module: purchase_addons
 #: model:ir.model.fields.selection,name:purchase_addons.selection__purchase_order__purchase_status__cancelled
 msgid "Cancelled"
-msgstr "取消"
+msgstr "已取消"
 
 #. module: purchase_addons
 #: model_terms:ir.ui.view,arch_db:purchase_addons.purchase_order_form_ribbon
 msgid "DONE"
-msgstr "完毕"
+msgstr "完成"
 
 #. module: purchase_addons
 #: model:ir.model.fields.selection,name:purchase_addons.selection__purchase_order__purchase_status__done
 msgid "Done"
-msgstr "完毕"
+msgstr "完成"
 
 #. module: purchase_addons
 #: model_terms:ir.ui.view,arch_db:purchase_addons.purchase_order_form_ribbon

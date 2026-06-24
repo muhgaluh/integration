@@ -1,0 +1,86 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* manufacturing_addons
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0-20250909\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-23 07:20+0000\n"
+"PO-Revision-Date: 2026-06-23 07:20+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "CANCELLED"
+msgstr "DIBATALKAN"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "CONFIRMED"
+msgstr "DIKONFIRMASI"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__cancelled
+msgid "Cancelled"
+msgstr "Dibatalkan"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__confirmed
+msgid "Confirmed"
+msgstr "Dikonfirmasi"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "DONE"
+msgstr "SELESAI"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "DRAFT"
+msgstr "DRAFT"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__done
+msgid "Done"
+msgstr "Selesai"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__draft
+msgid "Draft"
+msgstr "Draft"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "IN PROGRESS"
+msgstr "DALAM PROSES"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__in_progress
+msgid "In Progress"
+msgstr "Dalam Proses"
+
+#. module: manufacturing_addons
+#: model:ir.model,name:manufacturing_addons.model_mrp_production
+msgid "Production Order"
+msgstr "Pesanan Produksi"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields,field_description:manufacturing_addons.field_mrp_production__production_status
+msgid "Production Status"
+msgstr "Status Produksi"
+
+#. module: manufacturing_addons
+#: model_terms:ir.ui.view,arch_db:manufacturing_addons.view_mrp_production_form_inherit_status_ribbon
+msgid "TO CLOSE"
+msgstr "UNTUK MENUTUP"
+
+#. module: manufacturing_addons
+#: model:ir.model.fields.selection,name:manufacturing_addons.selection__mrp_production__production_status__to_close
+msgid "To Close"
+msgstr "Untuk Menutup"

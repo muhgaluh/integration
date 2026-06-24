@@ -12,11 +12,6 @@
 
             <xpath expr="//sheet/div[@class='oe_button_box']" position="after">
                 <field name="availability_status" invisible="1"/>
-
-                <widget name="web_ribbon"
-                        title="TO BE APPROVED"
-                        bg_color="bg-warning"
-                        attrs="{'invisible':[('availability_status','!=','to_approve')]}"/>
         
                 <widget name="web_ribbon"
                         title="QUOTATION"
@@ -38,35 +33,10 @@
                         bg_color="bg-success"
                         attrs="{'invisible':[('availability_status','!=','done')]}"/>
 
-                <!-- <widget name="web_ribbon"
-                        title="AVAILABLE"
-                        bg_color="bg-success"
-                        attrs="{'invisible':[('availability_status','!=','available')]}"/>
-                
                 <widget name="web_ribbon"
-                        title="PARTIAL AVAILABLE"
-                        bg_color="bg-warning"
-                        attrs="{'invisible':[('availability_status','!=','partial_available')]}"/>
-                
-                <widget name="web_ribbon"
-                        title="PARTIAL RESERVED"
-                        bg_color="bg-info"
-                        attrs="{'invisible':[('availability_status','!=','partial_reserved')]}"/>
-                
-                <widget name="web_ribbon"
-                        title="RESERVED"
-                        bg_color="bg-info"
-                        attrs="{'invisible':[('availability_status','!=','reserved')]}"/>
-
-                <widget name="web_ribbon"
-                        title="DONE"
-                        bg_color="bg-success"
-                        attrs="{'invisible':[('availability_status','!=','done')]}"/>
-                
-                <widget name="web_ribbon"
-                        title="OUT OF STOCK"
+                        title="CANCELLED"
                         bg_color="bg-danger"
-                        attrs="{'invisible':[('availability_status','!=','unavailable')]}"/> -->
+                        attrs="{'invisible':[('availability_status','!=','cancelled')]}"/>
 
             </xpath>
             
@@ -78,7 +48,7 @@
                     decoration-warning="stock_status == 'partial_available'"
                     decoration-primary="stock_status == 'partial_reserved'"
                     decoration-info="stock_status == 'reserved'"
-                    decoration-danger="stock_status == 'unavailable'"/>
+                    decoration-danger="stock_status in ('cancelled', 'unavailable')"/>
             </xpath>
 
         </field>

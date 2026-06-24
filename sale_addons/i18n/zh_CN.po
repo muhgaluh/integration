@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0-20250909\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 02:22+0000\n"
-"PO-Revision-Date: 2026-06-18 02:22+0000\n"
+"POT-Creation-Date: 2026-06-23 13:05+0000\n"
+"PO-Revision-Date: 2026-06-23 13:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,14 +22,25 @@ msgstr "可用的"
 
 #. module: sale_addons
 #: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
+msgid "CANCELLED"
+msgstr "已取消"
+
+#. module: sale_addons
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__cancelled
+#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__cancelled
+msgid "Cancelled"
+msgstr "已取消"
+
+#. module: sale_addons
+#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
 msgid "DONE"
-msgstr "完毕"
+msgstr "完成"
 
 #. module: sale_addons
 #: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__done
 #: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__done
 msgid "Done"
-msgstr "完毕"
+msgstr "完成"
 
 #. module: sale_addons
 #: model:ir.model.fields.selection,name:sale_addons.selection__sale_order_line__stock_status__unavailable
@@ -49,7 +60,7 @@ msgstr "部分保留"
 #. module: sale_addons
 #: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
 msgid "QUOTATION"
-msgstr "引述"
+msgstr "报价"
 
 #. module: sale_addons
 #: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
@@ -59,7 +70,7 @@ msgstr "报价已发送"
 #. module: sale_addons
 #: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__quotation
 msgid "Quotation"
-msgstr "引述"
+msgstr "报价"
 
 #. module: sale_addons
 #: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__quotation_sent
@@ -96,13 +107,3 @@ msgstr "地位"
 #: model:ir.model.fields,field_description:sale_addons.field_sale_order_line__stock_status
 msgid "Stock Status"
 msgstr "库存状况"
-
-#. module: sale_addons
-#: model_terms:ir.ui.view,arch_db:sale_addons.sale_order_form_stock_status
-msgid "TO BE APPROVED"
-msgstr "待批准"
-
-#. module: sale_addons
-#: model:ir.model.fields.selection,name:sale_addons.selection__sale_order__availability_status__to_approve
-msgid "To Be Approved"
-msgstr "待批准"

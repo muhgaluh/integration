@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_mrp_production_form_inherit_status_ribbon" model="ir.ui.view">
+        <field name="name">mrp.production.form.status.ribbon</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@class='oe_button_box']" position="after">
+
+                <field name="production_status" invisible="1"/>
+
+                <widget name="web_ribbon"
+                        title="DRAFT"
+                        bg_color="bg-dark"
+                        attrs="{'invisible':[('production_status','!=','draft')]}"/>
+
+                <widget name="web_ribbon"
+                        title="CONFIRMED"
+                        bg_color="bg-info"
+                        attrs="{'invisible':[('production_status','!=','confirmed')]}"/>
+
+                <widget name="web_ribbon"
+                        title="IN PROGRESS"
+                        bg_color="bg-warning"
+                        attrs="{'invisible':[('production_status','!=','in_progress')]}"/>
+
+                <widget name="web_ribbon"
+                        title="TO CLOSE"
+                        bg_color="bg-warning"
+                        attrs="{'invisible':[('production_status','!=','to_close')]}"/>
+
+                <widget name="web_ribbon"
+                        title="DONE"
+                        bg_color="bg-success"
+                        attrs="{'invisible':[('production_status','!=','done')]}"/>
+
+                <widget name="web_ribbon"
+                        title="CANCELLED"
+                        bg_color="bg-danger"
+                        attrs="{'invisible':[('production_status','!=','cancelled')]}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
