@@ -220,7 +220,8 @@ class InswQueue(models.Model):
                 f"Jenis kegiatan {self.kd_kegiatan} belum didukung"
             )
 
-        final_payload = {"data": payload_data}
+        # final_payload = {"data": payload_data}
+        final_payload = {"data": payload_data if self.kd_kegiatan == '29' else [payload_data]}
         self.json_payload = json.dumps(final_payload, indent=4)
 
         # ==========================================
