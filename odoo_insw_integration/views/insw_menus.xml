@@ -29,5 +29,5 @@
     
     <menuitem id="menu_insw_queue" name="Semua Transaksi" parent="menu_insw_root" action="action_insw_queue_list" sequence="10"/>
     
-    <menuitem id="menu_insw_config" name="Konfigurasi" parent="menu_insw_root" action="action_insw_config" sequence="90"/>
+    <menuitem id="menu_insw_config" name="Konfigurasi" parent="menu_insw_root" action="action_insw_config" sequence="90" groups="odoo_insw_integration.group_insw_administrator"/>
 </odoo>
