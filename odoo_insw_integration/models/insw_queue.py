@@ -81,6 +81,7 @@ class InswQueue(models.Model):
 
     # --- Log Response ---
     insw_id_transaksi = fields.Char(string='INSW ID Transaksi', readonly=True, copy=False)
+    api_endpoint = fields.Char(string='API Endpoint', readonly=True, copy=False)
     json_payload = fields.Text(string='JSON Terkirim', readonly=True)
     json_response = fields.Text(string='JSON Balasan', readonly=True)
     error_message = fields.Text(string='Pesan Error', readonly=True)
@@ -130,13 +131,6 @@ class InswQueue(models.Model):
             'x-unique-key': config.unique_key or ''
         }
 
-        # Waktu deklarasi ke INSW
-        # declare_dt = fields.Datetime.now()
-
-        # Simpan ke database agar menjadi audit trail
-        # if not self.tanggal_declare:
-        #     self.tanggal_declare = declare_dt
-
         # Susun Payload 
         nama_entitas = self.lawan_transaksi
         if self.sumber_dokumen in ['production', 'adjustment'] and not nama_entitas:
@@ -150,45 +144,6 @@ class InswQueue(models.Model):
                 self.with_context(tz='Asia/Jakarta'),
                 self.tanggal_kegiatan
             )
-
-        # local_declare_dt = fields.Datetime.context_timestamp(
-        #     self.with_context(tz='Asia/Jakarta'),
-        #     declare_dt
-        # )
-
-        # payload_data = {
-        #     "kdKegiatan": self.kd_kegiatan,
-        #     "dokumenKegiatan": [{
-        #         "nomorDokKegiatan": self.nomor_dok_kegiatan,
-        #         # "tanggalKegiatan": self.tanggal_kegiatan.strftime('%Y-%m-%d %H:%M:%S') if self.tanggal_kegiatan else "",
-        #         "tanggalKegiatan": local_dt.strftime('%Y-%m-%d %H:%M:%S') if local_dt else "",
-        #         "namaEntitas": nama_entitas or "-",
-        #         "keterangan": self.keterangan or "-",  # Field keterangan untuk Adjustment
-        #         "barangTransaksi": []
-        #     }]
-        # }
-
-        # # Loop Barang
-        # for line in self.line_ids:
-        #     item = {
-        #         "kdKategoriBarang": line.kd_kategori_barang,
-        #         "kdBarang": line.kd_barang or "-",
-        #         "uraianBarang": line.uraian_barang or "-",
-        #         "jumlah": line.jumlah,
-        #         "kdSatuan": line.kd_satuan,
-        #         "nilai": line.nilai_barang,
-        #         "dokumen": []
-        #     }
-            
-        #     # Tempel Dokumen BC
-        #     if self.kode_dokumen_bc:
-        #         item["dokumen"].append({
-        #             "kodeDokumen": self.kode_dokumen_bc,
-        #             "nomorDokumen": self.nomor_aju or "-",
-        #             "tanggalDokumen": self.tanggal_dokumen_bc.strftime('%Y-%m-%d') if self.tanggal_dokumen_bc else ""
-        #         })
-            
-        #     payload_data["dokumenKegiatan"][0]["barangTransaksi"].append(item)
         
         # PILIH PAYLOAD BERDASARKAN KEGIATAN
         if self.kd_kegiatan == '29':
@@ -208,9 +163,6 @@ class InswQueue(models.Model):
             payload_data = self.payload_adjustment(local_dt, nama_entitas)
 
         # elif self.kd_kegiatan == '40':
-        #     payload_data = self.payload_produksi(local_dt, nama_entitas)
-
-        # elif self.kd_kegiatan == '40':
         #     raise UserError(
         #         "Kegiatan Produksi (40) tidak dikirim ke API INSW."
         #     )
@@ -220,7 +172,6 @@ class InswQueue(models.Model):
                 f"Jenis kegiatan {self.kd_kegiatan} belum didukung"
             )
 
-        # final_payload = {"data": payload_data}
         final_payload = {"data": payload_data if self.kd_kegiatan == '29' else [payload_data]}
         self.json_payload = json.dumps(final_payload, indent=4)
 
@@ -271,7 +222,11 @@ class InswQueue(models.Model):
         # ==========================================
         #          JALUR ASLI (REAL API)
         # ==========================================
-        endpoint = f"{config.url_api}/api/inventory/transaksi" 
+        # endpoint = f"{config.url_api}/api/inventory/transaksi" 
+        endpoint = self._get_endpoint(config) 
+
+        # Simpan endpoint ke log
+        self.api_endpoint = endpoint
 
         try:
             response = requests.post(endpoint, headers=headers, data=json.dumps(final_payload))
@@ -318,11 +273,20 @@ class InswQueue(models.Model):
 
     # Payload Saldo Awal (29)
     def payload_saldo_awal(self, local_dt):
+        config = self.env['insw.config'].get_config()
+
         payload = {
             "no_kegiatan": self.nomor_dok_kegiatan,
             "tgl_kegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S') if local_dt else "",
-            "barangSaldo": [],
         }
+
+        if config.api_version == '1.5':
+            payload.update({
+                "npwp": config.npwp_perusahaan or "",
+                "nib": config.nib_perusahaan or "",
+            })
+
+        payload["barangSaldo"] = []
 
         for line in self.line_ids:
             item = {
@@ -342,15 +306,25 @@ class InswQueue(models.Model):
 
     # Payload Pemasukan (30)
     def payload_pemasukan(self, local_dt, nama_entitas):
+        config = self.env['insw.config'].get_config()
+
         payload = {
             "kdKegiatan": "30",
-            "dokumenKegiatan": [{
+        }
+
+        if config.api_version == '1.5':
+            payload.update({
+                "npwp": config.npwp_perusahaan or "",
+                "nib": config.nib_perusahaan or "",
+            })
+        
+        # Lanjutan Payload
+        payload["dokumenKegiatan"] = [{
                 "nomorDokKegiatan": self.nomor_dok_kegiatan,
                 "tanggalKegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S') if local_dt else "",
                 "namaEntitas": nama_entitas or "-",
                 "barangTransaksi": []
             }]
-        }
 
         for line in self.line_ids:
             item = {
@@ -379,15 +353,24 @@ class InswQueue(models.Model):
     
     # Payload Pengeluaran (31)
     def payload_pengeluaran(self, local_dt, nama_entitas):
+        config = self.env['insw.config'].get_config()
+
         payload = {
             "kdKegiatan": "31",
-            "dokumenKegiatan": [{
+        }
+
+        if config.api_version == '1.5':
+            payload.update({
+                "npwp": config.npwp_perusahaan or "",
+                "nib": config.nib_perusahaan or "",
+            })
+
+        payload["dokumenKegiatan"] = [{
                 "nomorDokKegiatan": self.nomor_dok_kegiatan,
                 "tanggalKegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S') if local_dt else "",
                 "namaEntitas": nama_entitas or "-",
                 "barangTransaksi": []
             }]
-        }
 
         for line in self.line_ids:
             item = {
@@ -416,16 +399,24 @@ class InswQueue(models.Model):
 
     # Payload Stock Opname (32)
     def payload_stock_opname(self, local_dt, nama_entitas):
+        config = self.env['insw.config'].get_config()
+
         payload = {
             "kdKegiatan": "32",
-            "dokumenKegiatan": [{
+        }
+
+        if config.api_version == '1.5':
+            payload.update({
+                "npwp": config.npwp_perusahaan or "",
+                "nib": config.nib_perusahaan or "",
+            })
+            
+        payload["dokumenKegiatan"] = [{
                 "nomorDokKegiatan": self.nomor_dok_kegiatan,
                 "tanggalKegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S'),
                 "namaEntitas": nama_entitas or "-",
                 "barangTransaksi": []
             }]
-        }
-
 
         for line in self.line_ids:
             item = {
@@ -454,17 +445,25 @@ class InswQueue(models.Model):
     
     # Payload Adjustment (33)
     def payload_adjustment(self, local_dt, nama_entitas):
+        config = self.env['insw.config'].get_config()
+
         payload = {
             "kdKegiatan": "33",
-            "dokumenKegiatan": [{
+        }
+
+        if config.api_version == '1.5':
+            payload.update({
+                "npwp": config.npwp_perusahaan or "",
+                "nib": config.nib_perusahaan or "",
+            })
+
+        payload["dokumenKegiatan"] = [{
                 "nomorDokKegiatan": self.nomor_dok_kegiatan,
                 "tanggalKegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S'),
                 "keterangan": self.keterangan or "-",
                 "namaEntitas": nama_entitas or "-",
                 "barangTransaksi": []
             }]
-        }
-
 
         for line in self.line_ids:
             item = {
@@ -491,43 +490,147 @@ class InswQueue(models.Model):
 
         return payload
 
-    # Payload Produksi (40)
-    # def payload_produksi(self, local_dt, nama_entitas):
-    #     payload = {
-    #         "kdKegiatan": "40",
-    #         "dokumenKegiatan": [{
-    #             "nomorDokKegiatan": self.nomor_dok_kegiatan,
-    #             "tanggalKegiatan": local_dt.strftime('%d-%m-%Y %H:%M:%S') if local_dt else "",
-    #             "keterangan": self.keterangan,
-    #             "namaEntitas": nama_entitas or "-",
-    #             "barangTransaksi": []
-    #         }]
-    #     }
 
-    #     for line in self.line_ids:
-    #         item = {
-    #             "kdKategoriBarang": line.kd_kategori_barang,
-    #             "kdBarang": line.kd_barang or "-",
-    #             "uraianBarang": line.uraian_barang or "-",
-    #             "jumlah": line.jumlah,
-    #             "kdSatuan": line.kd_satuan,
-    #             "nilai": line.nilai_barang,
-    #             "dokumen": []
+    # # Endpoint
+    # def _get_endpoint(self, config):
+    #     """
+    #     Mengembalikan endpoint sesuai environment dan kd_kegiatan.
+    #     """
+    #     # ==========================================================
+    #     # API VERSION 1.5
+    #     # ==========================================================
+    #     if config.api_version == '1.5':
+
+    #         # Dummy
+    #         if config.environment == 'dev':
+    #             if self.kd_kegiatan == '29':
+    #                 return "https://api.insw.go.id/api-prod/inventory/tempInsertSaldoAwal"
+    #             else:
+    #                 return "https://api.insw.go.id/api-prod/inventory/pemasukan/tempInsert"
+
+    #         # Production
+    #         else:
+    #             if self.kd_kegiatan == '29':
+    #                 return "https://api.insw.go.id/api-prod/inventory/insertSaldoAwal"
+    #             else:
+    #                 return "https://api.insw.go.id/api-prod/inventory/pemasukan/insert"
+
+    #     # ==========================================================
+    #     # API VERSION 1.6 (Default)
+    #     # ==========================================================
+    #     if config.environment == 'dev':
+
+    #         # Pengecualian: Dummy Pengeluaran menggunakan domain production
+    #         if self.kd_kegiatan == '31':
+    #             return "https://api.insw.go.id/api-prod/inventory/pemasukan/tempInsert"
+
+    #         endpoint_map = {
+    #             '29': '/api/inventory/temp/saldoAwal',
+    #             '30': '/api/inventory/temp/transaksi',
+    #             '32': '/api/inventory/temp/transaksi',
+    #             '33': '/api/inventory/temp/transaksi',
     #         }
 
-    #         if self.kode_dokumen_bc:
-    #             item["dokumen"].append({
-    #                 "kodeDokumen": self.kode_dokumen_bc,
-    #                 "nomorDokumen": self.nomor_dokumen_bc or "-",
-    #                 "tanggalDokumen": (
-    #                     self.tanggal_dokumen_bc.strftime('%d-%m-%Y')
-    #                     if self.tanggal_dokumen_bc else ""
-    #                 )
-    #             })
+    #     else:
+    #         endpoint_map = {
+    #             '29': '/api-prod/inventory/saldoAwal',
+    #             '30': '/api-prod/inventory/transaksi',
+    #             '31': '/api-prod/inventory/pemasukan/insert',
+    #             '32': '/api-prod/inventory/transaksi',
+    #             '33': '/api-prod/inventory/transaksi',
+    #         }
 
-    #         payload["dokumenKegiatan"][0]["barangTransaksi"].append(item)
+    #     endpoint_path = endpoint_map.get(self.kd_kegiatan)
 
-    #     return payload
+    #     if not endpoint_path:
+    #         raise UserError(
+    #             _("Endpoint untuk kegiatan %s belum tersedia.")
+    #             % self.kd_kegiatan
+    #         )
+
+    #     return "%s%s" % (
+    #         config.url_api.rstrip('/'),
+    #         endpoint_path
+    #     )
+
+    # Endpoint
+    def _get_endpoint(self, config):
+        """
+        Mengembalikan endpoint sesuai API Version, Environment dan Jenis Kegiatan.
+        """
+
+        # ==========================================================
+        # API VERSION 1.5
+        # ==========================================================
+        if config.api_version == '1.5':
+
+            if config.environment == 'dev':
+                endpoint_map = {
+                    '29': '/api-prod/inventory/tempInsertSaldoAwal',
+                    '30': '/api-prod/inventory/pemasukan/tempInsert',
+                    '31': '/api-prod/inventory/pemasukan/tempInsert',
+                    '32': '/api-prod/inventory/pemasukan/tempInsert',
+                    '33': '/api-prod/inventory/pemasukan/tempInsert',
+                }
+            else:
+                endpoint_map = {
+                    '29': '/api-prod/inventory/insertSaldoAwal',
+                    '30': '/api-prod/inventory/pemasukan/insert',
+                    '31': '/api-prod/inventory/pemasukan/insert',
+                    '32': '/api-prod/inventory/pemasukan/insert',
+                    '33': '/api-prod/inventory/pemasukan/insert',
+                }
+
+            endpoint_path = endpoint_map.get(self.kd_kegiatan)
+
+            if not endpoint_path:
+                raise UserError(
+                    _("Endpoint untuk kegiatan %s belum tersedia.")
+                    % self.kd_kegiatan
+                )
+
+            return "%s%s" % (
+                config.url_api.rstrip('/'),
+                endpoint_path
+            )
+
+        # ==========================================================
+        # API VERSION 1.6
+        # ==========================================================
+        if config.environment == 'dev':
+
+            # Khusus KD 31 tetap menggunakan domain production
+            if self.kd_kegiatan == '31':
+                return "https://api.insw.go.id/api-prod/inventory/pemasukan/tempInsert"
+
+            endpoint_map = {
+                '29': '/api/inventory/temp/saldoAwal',
+                '30': '/api/inventory/temp/transaksi',
+                '32': '/api/inventory/temp/transaksi',
+                '33': '/api/inventory/temp/transaksi',
+            }
+
+        else:
+            endpoint_map = {
+                '29': '/api-prod/inventory/saldoAwal',
+                '30': '/api-prod/inventory/transaksi',
+                '31': '/api-prod/inventory/pemasukan/insert',
+                '32': '/api-prod/inventory/transaksi',
+                '33': '/api-prod/inventory/transaksi',
+            }
+
+        endpoint_path = endpoint_map.get(self.kd_kegiatan)
+
+        if not endpoint_path:
+            raise UserError(
+                _("Endpoint untuk kegiatan %s belum tersedia.")
+                % self.kd_kegiatan
+            )
+
+        return "%s%s" % (
+            config.url_api.rstrip('/'),
+            endpoint_path
+        )
     
     def action_view_opening_balance(self):
         """Balik ke dokumen Opening Balance Batch"""

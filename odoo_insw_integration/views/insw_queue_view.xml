@@ -108,6 +108,7 @@
                         <page string="Log API (Teknis)">
                             <group>
                                 <field name="insw_id_transaksi"/>
+                                <field name="api_endpoint" readonly="1"/>
                                 <field name="error_message" decoration-danger="1"/>
                             </group>
                             <group>
