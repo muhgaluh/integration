@@ -232,7 +232,20 @@ class InswQueue(models.Model):
             response = requests.post(endpoint, headers=headers, data=json.dumps(final_payload))
             self.json_response = response.text
             
-            res_json = response.json()
+            # res_json = response.json()
+            try:
+                res_json = response.json()
+
+                self.json_response = json.dumps(
+                    res_json,
+                    indent=4,
+                    ensure_ascii=False
+                )
+
+            except ValueError:
+                # Kalau API mengembalikan HTML atau text biasa
+                self.json_response = response.text
+                raise UserError("Response API bukan format JSON.")
             
             if res_json.get('code') == '01':
                 data_respon = res_json.get('data', {})
